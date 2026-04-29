@@ -9,7 +9,11 @@ info "Unstowing existing configurations..."
 if command -v stow >/dev/null 2>&1; then
     [ -d "$DOTFILES_DIR/git" ] && (cd "$DOTFILES_DIR" && stow -D --target="$HOME" git || true)
     [ -d "$DOTFILES_DIR/nvim" ] && (cd "$DOTFILES_DIR" && stow -D --target="$HOME" nvim || true)
+    [ -d "$DOTFILES_DIR/zsh" ] && (cd "$DOTFILES_DIR" && stow -D --target="$HOME" zsh || true)
 fi
+
+info "Removing Oh My Zsh and plugins..."
+rm -rf "$HOME/.oh-my-zsh"
 
 info "Removing Neovim installations and state..."
 rm -f "$HOME/.local/bin/nvim"

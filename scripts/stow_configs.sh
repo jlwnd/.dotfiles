@@ -24,4 +24,5 @@ info "Applying Stow..."
 cd "$HOME/.dotfiles"
 stow -R --target="$HOME" git
 stow -R --target="$HOME" nvim
+stow -R --target="$HOME" zsh
 success "Configurations stowed successfully."
