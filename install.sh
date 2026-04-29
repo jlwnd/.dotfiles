@@ -4,7 +4,13 @@
 set -euo pipefail
 
 DOTFILES_DIR="$HOME/.dotfiles"
-REPO_URL="https://github.com/j-lewandowski/.dotfiles.git"
+REPO_URL="https://github.com/jlwnd/.dotfiles.git"
+
+# --- Cleanup Mode ---
+CLEAN_MODE=false
+if [[ "${1:-}" == "--clean" ]]; then
+    CLEAN_MODE=true
+fi
 
 # --- UI Helpers ---
 # ANSI color codes
@@ -20,6 +26,48 @@ success() { echo -e " ${GREEN}[SUCCESS]${NC} $1"; }
 warn()    { echo -e " ${YELLOW}[WARN]${NC} $1"; }
 error()   { echo -e " ${RED}[ERROR]${NC} $1"; exit 1; }
 step()    { echo -e "\n${BOLD}==> $1${NC}"; }
+
+cleanup() {
+    step "Running cleanup tasks (--clean flag provided)"
+    
+    info "Unstowing existing configurations..."
+    if command -v stow >/dev/null 2>&1; then
+        if [ -d "$DOTFILES_DIR/git" ]; then
+            cd "$DOTFILES_DIR" && stow -D --target="$HOME" git || true
+        fi
+        if [ -d "$DOTFILES_DIR/nvim" ]; then
+            cd "$DOTFILES_DIR" && stow -D --target="$HOME" nvim || true
+        fi
+    fi
+    
+    info "Removing Neovim AppImage (Linux)..."
+    rm -f "$HOME/.local/bin/nvim"
+    
+    info "Removing Neovim state, cache, and plugins..."
+    rm -rf "$HOME/.local/share/nvim"
+    rm -rf "$HOME/.local/state/nvim"
+    rm -rf "$HOME/.cache/nvim"
+    
+    info "Removing Git configuration and backups..."
+    rm -f "$HOME/.gitconfig" "$HOME/.gitconfig.local"
+    rm -f "$HOME/.gitconfig.backup"
+    rm -rf "$HOME/.config/nvim.backup"
+    
+    info "Removing path injections from shell profiles..."
+    if [ -f "$HOME/.zshrc" ]; then
+        # Use sed in a cross-platform way
+        sed -i.bak '/export PATH="$HOME\/.local\/bin:$PATH"/d' "$HOME/.zshrc" && rm -f "$HOME/.zshrc.bak" || true
+    fi
+    if [ -f "$HOME/.bashrc" ]; then
+        sed -i.bak '/export PATH="$HOME\/.local\/bin:$PATH"/d' "$HOME/.bashrc" && rm -f "$HOME/.bashrc.bak" || true
+    fi
+    
+    success "Cleanup complete."
+}
+
+if [ "$CLEAN_MODE" = true ]; then
+    cleanup
+fi
 
 # --- Requirements ---
 step "Pre-flight checks"
