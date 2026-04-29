@@ -79,15 +79,44 @@ elif [ "$OS" = "Linux" ]; then
     info "Installing basic packages..."
     sudo apt-get install -y stow git curl build-essential gcc make ripgrep fd-find npm python3-venv
 
-    if ! command -v nvim >/dev/null 2>&1 || [[ ! $(nvim --version | head -n1) =~ "v0.9" ]] && [[ ! $(nvim --version | head -n1) =~ "v0.1" ]]; then
-        info "Installing newest Neovim..."
-        curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-        sudo rm -rf /opt/nvim
-        sudo tar -C /opt -xzf nvim-linux64.tar.gz
-        sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
-        rm nvim-linux64.tar.gz
+    # Check if Neovim is missing or outdated
+    NEEDS_NVIM=false
+    if ! command -v nvim >/dev/null 2>&1; then
+        NEEDS_NVIM=true
     else
-        info "Neovim is already up to date."
+        CURRENT_VERSION=$(nvim --version | head -n1)
+        if [[ ! "$CURRENT_VERSION" =~ v0.(9|1) ]]; then
+            NEEDS_NVIM=true
+        fi
+    fi
+
+    if [ "$NEEDS_NVIM" = true ]; then
+        info "Installing/Updating Neovim..."
+        info "Installing/Updating Neovim via AppImage..."
+        mkdir -p "$HOME/.local/bin"
+        
+        # Download the AppImage
+        URL="https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
+        if curl -fLo "$HOME/.local/bin/nvim" "$URL"; then
+            chmod u+x "$HOME/.local/bin/nvim"
+            
+            # Ensure ~/.local/bin is in PATH for the current session
+            export PATH="$HOME/.local/bin:$PATH"
+            
+            # Add to shell profile if not already there
+            if ! grep -q 'export PATH="$HOME/.local/bin:$PATH"' "$HOME/.zshrc" 2>/dev/null; then
+                echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.zshrc"
+            fi
+            if ! grep -q 'export PATH="$HOME/.local/bin:$PATH"' "$HOME/.bashrc" 2>/dev/null; then
+                echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+            fi
+            
+            success "Neovim installed successfully."
+        else
+            error "Failed to download Neovim from $URL"
+        fi
+    else
+        info "Neovim is already up to date ($(nvim --version | head -n1))."
     fi
 
     if ! command -v delta >/dev/null 2>&1; then
