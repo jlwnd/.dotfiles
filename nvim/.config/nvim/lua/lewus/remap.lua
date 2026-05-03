@@ -21,6 +21,7 @@ vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+vim.keymap.set('n', '<leader>vd', vim.diagnostic.open_float, { desc = 'Open floating diagnostic (current line)' })
 
 vim.keymap.set('v', '<C-c>', '"+y', { desc = "Yank to system clipboard" })
 vim.keymap.set('n', '<C-S-v>', '"+p', { desc = "Paste from system clipboard" })

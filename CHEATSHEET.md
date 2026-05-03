@@ -39,10 +39,25 @@ This is a quick reference guide for your custom Neovim keybindings, plugin confi
 *   `<leader>e`: Toggle the Neo-tree file explorer sidebar.
 *   `<leader>o`: Focus the Neo-tree sidebar (jump into it).
 
+### 🧾 Buffers & Windows
+*   `:bd` — Close the current buffer without exiting Neovim (preferred when you want to "get out of a file").
+*   `:bd!` — Force close buffer and discard unsaved changes.
+*   `:buffers` or `:ls` — List open buffers.
+*   `:bn` / `:bp` — Jump to next / previous buffer.
+*   `:b#` — Switch to the alternate (previous) buffer.
+*   `:set hidden` — Allow switching away from modified buffers without saving.
+*   `:close` or `<C-w>c` — Close the current window (if using splits).
+*   `:only` or `<C-w>o` — Close all other windows except the current one.
+
 ### 🔍 Search (Telescope)
 *   `<leader>pf`: Find files in your current project.
 *   `<C-p>`: Quick find git files.
 *   `<leader>ps`: Grep/search for a specific word or string inside all files in your project.
+
+Note: your config maps Telescope's find and grep as follows:
+*   `<leader><leader>` — find files (telescope builtin.find_files)
+*   `<leader>g` — live grep (telescope builtin.live_grep)
+If you'd rather use the `<leader>pf` / `<C-p>` mappings shown above, you can add the appropriate keymaps to your config.
 
 ### 🌳 Syntax & Code (Treesitter & LSP)
 *   `<leader>vd`: Open floating diagnostic window for the current line.
