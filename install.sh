@@ -38,6 +38,7 @@ bash "$DOTFILES_DIR/scripts/install_fonts.sh"
 bash "$DOTFILES_DIR/scripts/install_zsh_env.sh"
 bash "$DOTFILES_DIR/scripts/stow_configs.sh"
 bash "$DOTFILES_DIR/scripts/setup_shell.sh"
+bash "$DOTFILES_DIR/scripts/setup_tmux.sh"
 
 success "Dotfiles installation complete!"
 info "Open Neovim with 'nvim' to initialize plugins."

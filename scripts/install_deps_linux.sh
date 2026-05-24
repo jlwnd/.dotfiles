@@ -6,7 +6,7 @@ step "Installing dependencies for Linux"
 info "Updating apt packages..."
 sudo apt-get update -y
 info "Installing basic packages..."
-sudo apt-get install -y stow git curl build-essential gcc make ripgrep fd-find npm python3-venv
+sudo apt-get install -y stow git curl build-essential gcc make ripgrep fd-find npm python3-venv tmux
 
 if ! command -v delta >/dev/null 2>&1; then
     info "Installing git-delta..."
