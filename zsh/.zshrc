@@ -90,5 +90,16 @@ fi
 [[ -d ~/.zsh/completions ]] && fpath=(~/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
 
+# --- ls -> eza (same aliases as CachyOS fish config) ---------------------------
+# Defined after oh-my-zsh so they override its ls/la/ll aliases.
+if command -v eza >/dev/null 2>&1; then
+  _eza='eza --color=always --group-directories-first --icons=always'
+  alias ls="$_eza -al"
+  alias la="$_eza -a"
+  alias ll="$_eza -l"
+  alias lt="$_eza -aT"
+  unset _eza
+fi
+
 # Machine-specific settings (not tracked in the dotfiles repo)
 [[ -r ~/.zshrc.local ]] && source ~/.zshrc.local
