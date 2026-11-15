@@ -1,0 +1,30 @@
+## Oh my tmux! local overrides
+# Symlinked to ~/.config/tmux/tmux.conf.local by stow.
+# Keeps the default prefix (C-b).
+# See the upstream file for all available options:
+# https://github.com/gpakosz/.tmux/blob/master/.tmux.conf.local
+
+# Copy selection to the OS clipboard (pbcopy / wl-copy / xclip, auto-detected)
+tmux_conf_copy_to_os_clipboard=true
+
+# -- user customizations -------------------------------------------------------
+
+# Enable mouse support
+set -g mouse on
+
+# -- tpm -----------------------------------------------------------------------
+# Oh my tmux! installs and loads TPM itself:
+#   /!\ do not add set -g @plugin 'tmux-plugins/tpm'
+#   /!\ do not add run '~/.tmux/plugins/tpm/tpm'
+# Bindings: <prefix> I install, <prefix> u update, <prefix> M-u uninstall
+
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @plugin 'tmux-plugins/tmux-prefix-highlight'
+# Seamless C-h/j/k/l navigation between tmux panes and Neovim splits
+set -g @plugin 'christoomey/vim-tmux-navigator'
+
+# Automatically restore sessions and save every 15 minutes
+set -g @continuum-restore 'on'
+set -g @continuum-save-interval '15'

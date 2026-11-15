@@ -1,33 +1,13 @@
+# OS junk
 .DS_Store
-.AppleDouble
-.LSOverride
 ._*
-.Spotlight-V100
-.Trashes
 
-undo/
-*.undo
-
+# Editor swap/undo files
 *.swp
 *.swo
-.swp/
+*.undo
 
-.netrwhist
-*viminfo
-
-*.log
-
-session/
-.nvim-session/
-
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.so
-*.dylib
-
-mason/
-mason-lspconfig/
-
-!lazy-lock.json
+# Local, machine-specific files that must never be committed
+*.local
+!tmux/.config/tmux/tmux.conf.local
+*.backup

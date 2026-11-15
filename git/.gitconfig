@@ -1,5 +1,12 @@
-[include]
-	path = ~/.gitconfig.local
+# Shared Git configuration (tracked in the dotfiles repo).
+#
+# Machine-specific settings (user.name, user.email, credential helpers, ...)
+# belong in ~/.gitconfig.local, which is NOT tracked. It is created by
+# scripts/setup_git.sh.
+#
+# NOTE: ~/.gitconfig is a symlink into this repo, so `git config --global ...`
+# and `gh auth setup-git` would write here. Use
+# `git config --file ~/.gitconfig.local ...` instead.
 
 [core]
 	pager = delta
@@ -17,19 +24,21 @@
 [diff]
 	colorMoved = default
 
+[pull]
+	ff = only
+
+[init]
+	defaultBranch = main
+
 [alias]
 	co = checkout
+	sw = switch
 	br = branch
 	ci = commit
 	st = status
 	last = log -1 HEAD
-	unstage = reset HEAD --
-[user]
-	name = Jakub Lewandowski
-	email = kubalew.pl@gmail.com
-[credential "https://github.com"]
-	helper = 
-	helper = !gh auth git-credential
-[credential "https://gist.github.com"]
-	helper = 
-	helper = !gh auth git-credential
+	unstage = restore --staged --
+
+# Must stay LAST: later values override earlier ones, so local settings win.
+[include]
+	path = ~/.gitconfig.local

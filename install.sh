@@ -9,7 +9,9 @@ if ! command -v git >/dev/null 2>&1; then echo "[ERROR] git required"; exit 1; f
 
 if [ -d "$DOTFILES_DIR" ]; then
     cd "$DOTFILES_DIR"
-    git pull origin main >/dev/null 2>&1 || true
+    if ! git pull --ff-only origin main; then
+        echo "[WARN] Could not update $DOTFILES_DIR (local changes or no network?). Continuing with the current version."
+    fi
 else
     git clone "$REPO_URL" "$DOTFILES_DIR"
     cd "$DOTFILES_DIR"
@@ -37,8 +39,9 @@ bash "$DOTFILES_DIR/scripts/install_rust.sh"
 bash "$DOTFILES_DIR/scripts/install_fonts.sh"
 bash "$DOTFILES_DIR/scripts/install_zsh_env.sh"
 bash "$DOTFILES_DIR/scripts/stow_configs.sh"
-bash "$DOTFILES_DIR/scripts/setup_shell.sh"
 bash "$DOTFILES_DIR/scripts/setup_tmux.sh"
+bash "$DOTFILES_DIR/scripts/setup_shell.sh"
 
 success "Dotfiles installation complete!"
 info "Open Neovim with 'nvim' to initialize plugins."
+info "Start tmux to install its plugins automatically."

@@ -16,29 +16,43 @@ plugins=(
     zsh-syntax-highlighting
 )
 
-source $ZSH/oh-my-zsh.sh
+[[ -r "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-PATH=~/.console-ninja/.bin:$PATH
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# --- PATH ---------------------------------------------------------------------
+# Prepend a directory to PATH only if it exists.
+path_prepend() { [[ -d "$1" ]] && export PATH="$1:$PATH"; }
 
-# pyenv
+path_prepend "$HOME/.local/bin"
+path_prepend "$HOME/.cargo/bin"
+path_prepend "$HOME/.console-ninja/.bin"
+path_prepend "$HOME/.opencode/bin"
+path_prepend "$HOME/.antigravity/antigravity/bin"
+
+# uv / other tools that ship an env script
+[[ -r "$HOME/.local/bin/env" ]] && source "$HOME/.local/bin/env"
+
+# --- nvm ----------------------------------------------------------------------
+export NVM_DIR="$HOME/.nvm"
+[[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+[[ -s "$NVM_DIR/bash_completion" ]] && source "$NVM_DIR/bash_completion"
+
+# --- pyenv --------------------------------------------------------------------
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-fpath=(~/.zsh/completions $fpath)
+path_prepend "$PYENV_ROOT/bin"
+if command -v pyenv >/dev/null 2>&1; then
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
+  if pyenv commands | grep -qx virtualenv-init; then
+    eval "$(pyenv virtualenv-init -)"
+  fi
+fi
+
+# --- completions --------------------------------------------------------------
+[[ -d ~/.zsh/completions ]] && fpath=(~/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
 
-# opencode
-export PATH=/Users/kuba-macbook/.opencode/bin:$PATH
-
-# Added by Antigravity
-export PATH="/Users/kuba-macbook/.antigravity/antigravity/bin:$PATH"
-
-. "$HOME/.local/bin/env"
+# Machine-specific settings (not tracked in the dotfiles repo)
+[[ -r ~/.zshrc.local ]] && source ~/.zshrc.local
