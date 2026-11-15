@@ -10,5 +10,5 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 info "Running brew install..."
-brew install stow git curl neovim ripgrep fd npm python3 git-delta tmux
+brew install stow git curl neovim ripgrep fd npm python3 git-delta tmux fastfetch
 success "macOS dependencies installed."

@@ -27,7 +27,7 @@ if command -v pacman >/dev/null 2>&1; then
     info "Detected pacman (Arch-based)."
     sudo pacman -Syu --needed --noconfirm \
         stow git curl base-devel ripgrep fd npm python tmux zsh \
-        git-delta neovim wl-clipboard xclip fontconfig
+        git-delta neovim wl-clipboard xclip fontconfig fastfetch
 elif command -v apt-get >/dev/null 2>&1; then
     info "Detected apt (Debian/Ubuntu)."
     sudo apt-get update -y
@@ -45,7 +45,7 @@ elif command -v dnf >/dev/null 2>&1; then
     info "Detected dnf (Fedora)."
     sudo dnf install -y \
         stow git curl gcc make ripgrep fd-find npm python3 tmux zsh \
-        git-delta neovim wl-clipboard xclip fontconfig
+        git-delta neovim wl-clipboard xclip fontconfig fastfetch
 else
     error "Unsupported package manager (supported: pacman, apt, dnf)."
 fi
