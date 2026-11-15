@@ -24,6 +24,36 @@ plugins=(
 
 [[ -r "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
 
+# --- syntax highlighting: mimic fish's default theme --------------------------
+# Commands in the default colour, arguments cyan, strings yellow, unknown
+# commands bright red, existing paths underlined. Must be set after the plugin loads.
+typeset -gA ZSH_HIGHLIGHT_STYLES
+for _k in command builtin alias suffix-alias global-alias function precommand \
+          hashed-command reserved-word arg0; do
+  ZSH_HIGHLIGHT_STYLES[$_k]='none'
+done
+unset _k
+ZSH_HIGHLIGHT_STYLES[default]='fg=cyan'
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=9'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=cyan'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=cyan'
+ZSH_HIGHLIGHT_STYLES[path]='fg=cyan,underline'
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=cyan,underline'
+ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=cyan,underline'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=yellow'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=yellow'
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=yellow'
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=14'
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='fg=14'
+ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='fg=14'
+ZSH_HIGHLIGHT_STYLES[globbing]='fg=14'
+ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=14'
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=green'
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=cyan,bold'
+ZSH_HIGHLIGHT_STYLES[comment]='fg=red'
+ZSH_HIGHLIGHT_STYLES[assign]='none'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
